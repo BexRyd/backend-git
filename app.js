@@ -16,7 +16,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use("/healthcheck", require("./routes/healthcheck.js"));
+app.use("/healthcheck", require("./routes/healthcheck.routes"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
