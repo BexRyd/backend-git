@@ -4,21 +4,32 @@ const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const https = require("https");
+const fs = require("fs");
+
+let options = {
+  key: fs.readFileSync("rebecca-key.pem"),
+  cert: fs.readFileSync("rebecca-cert.pem"),
+};
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
   res.setHeader(
     "Content-Security-Policy",
     "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'"
   );
   next();
 });
+*/
 
 app.use("/healthcheck", require("./routes/healthcheck.routes"));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -63,4 +74,8 @@ app.post("/authorize", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`STARTED LISTENING ON PORT ${PORT}`);
+});
+
+https.createServer(options, app).listen(443, function () {
+  console.log("https listening on port 443");
 });
