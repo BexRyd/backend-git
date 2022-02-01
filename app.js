@@ -6,7 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 
-const https = require("https");
+//const https = require("https");
 const fs = require("fs");
 const auditlog = require("audit-log/lib/auditlog");
 
@@ -66,8 +66,11 @@ app.post("/authorize", (req, res) => {
   ) {
     auditlog.addTransport("console");
     auditlog.logEvent(
-      `user with the credentials ${user} and password ${password} just logged in`
+      `user with the credentials ${user} and password ${password} just logged in`,
+      "https://rebecca-backend.herokuapp.com/authorize",
+      "logged in"
     );
+
     console.log("Authorized");
     const token = jwt.sign(
       {
