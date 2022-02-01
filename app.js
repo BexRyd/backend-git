@@ -1,21 +1,29 @@
+var marvel = require("marvel-comics-characters");
 const credentials = { secretUser: "user", secretPassword: "password" };
 
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
-const path = require("path");
+
 const https = require("https");
 const fs = require("fs");
+
+console.log(marvel.random());
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 3000;
+
+/*auditlog.addTransport("mongoose", {
+  connectionString: "mongodb:localhost:27017/jensen-backend",
+});*/
+
+//auditLog.addTransport("console");
 
 let options = {
   key: fs.readFileSync("rebecca-key.pem"),
   cert: fs.readFileSync("rebecca-cert.pem"),
 };
-
-const app = express();
-app.use(express.urlencoded({ extended: true }));
-const PORT = process.env.PORT || 3000;
 
 /*app.use(function (req, res, next) {
   res.setHeader(
