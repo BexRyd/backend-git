@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const https = require("https");
 const fs = require("fs");
+const auditlog = require("audit-log/lib/auditlog");
 
 console.log(marvel.random());
 const app = express();
@@ -63,6 +64,10 @@ app.post("/authorize", (req, res) => {
     user === credentials.secretUser &&
     password === credentials.secretPassword
   ) {
+    auditlog.addTransport("console");
+    auditlog.logEvent(
+      `user with the credentials ${user} and password ${password} just logged in`
+    );
     console.log("Authorized");
     const token = jwt.sign(
       {
@@ -84,6 +89,7 @@ app.listen(PORT, () => {
   console.log(`STARTED LISTENING ON PORT ${PORT}`);
 });
 
-https.createServer(options, app).listen(443, function () {
+/*https.createServer(options, app).listen(443, function () {
   console.log("https listening on port 443");
 });
+*/
